@@ -1,0 +1,2681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dangote Refinery - Integrated Operations Command Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: .2s linear;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Professional Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .logo::before {
+            content: "⚡";
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Hero Command Center */
+        .command-center {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .center-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .center-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .center-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .center-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Critical Systems Grid */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .system-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .system-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .system-status {
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-operational {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .status-warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-critical {
+            background: rgba(255, 69, 58, 0.2);
+            color: #ff453a;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+            transition: width 2s ease;
+        }
+
+        /* Real-time Monitoring */
+        .monitoring-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4rem 2rem;
+        }
+
+        .monitoring-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .main-dashboard {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-button {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #00ff88;
+            border-bottom-color: #00ff88;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Process Flow Visualization */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem;
+            background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.1));
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .flow-stage {
+            text-align: center;
+            flex: 1;
+        }
+
+        .flow-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .flow-arrow {
+            color: #00ff88;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+        }
+
+        /* Alerts Panel */
+        .alerts-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .alert-high {
+            border-left-color: #ff453a;
+        }
+
+        .alert-medium {
+            border-left-color: #ffc107;
+        }
+
+        .alert-low {
+            border-left-color: #00ff88;
+        }
+
+        .alert-icon {
+            font-size: 1.2rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .alert-time {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Supply Chain Module */
+        .supply-chain {
+            padding: 4rem 2rem;
+        }
+
+        .supply-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .supply-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .supply-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .supply-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .supply-metric {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Financial Intelligence */
+        .financial-intel {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4rem 2rem;
+        }
+
+        .intel-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .financial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .financial-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .financial-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .profit {
+            color: #00ff88;
+        }
+
+        .revenue {
+            color: #007aff;
+        }
+
+        .costs {
+            color: #ff453a;
+        }
+
+        /* Interactive Controls */
+        .control-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .control-button {
+            padding: 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            color: #00ff88;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .control-button.critical {
+            background: rgba(255, 69, 58, 0.1);
+            border-color: rgba(255, 69, 58, 0.3);
+            color: #ff453a;
+        }
+
+        .control-button.critical:hover {
+            background: rgba(255, 69, 58, 0.2);
+        }
+
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Modal System */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Login Form */
+        .login-form {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .financial-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .center-title {
+                font-size: 2.5rem;
+            }
+            
+            .systems-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .financial-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-flow {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Animation for real-time updates */
+        @keyframes highlight {
+            0% { background-color: rgba(0, 255, 136, 0.1); }
+            100% { background-color: transparent; }
+        }
+
+        .updated {
+            animation: highlight 1s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.5);
+        }
+
+        
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0 1rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section {
+            margin-bottom: 2rem;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: #00ff88;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a:hover {
+            color: #00ff88;
+            transform: translateX(5px);
+        }
+
+        .footer-links i {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info i {
+            margin-right: 0.8rem;
+            color: #00ff88;
+            width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #00ff88;
+            transform: translateY(-3px);
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .newsletter-input {
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-family: inherit;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .newsletter-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            background: #00ff88;
+            color: #0a0a0f;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .legal-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .legal-links a:hover {
+            color: #00ff88;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .legal-links {
+                justify-content: center;
+            }
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #00ff88;
+            color: #0a0a0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #00cc6a;
+            transform: translateY(-3px);
+        }
+
+        /* Demo Content */
+        .content {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .scroll-indicator {
+            width: 100%;
+            height: 5px;
+            z-index: 10002;
+            background: #00cc6a;
+            top: 0;
+            position: fixed;
+            transform-origin: left;
+        }#menu-btn {
+            display: none;
+            font-size: 20px;
+        }
+
+        @media(max-width: 740px) {
+        #menu-btn {
+            display: initial;
+            cursor: pointer;
+        }
+        .nav-links {
+            position: absolute;
+            top: 100%; left: 0;
+            right: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            display: flex;
+            flex-direction: column;
+            background: #334;
+            z-index: 5;
+        }
+        .nav-links.active {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)
+        }
+        .nav-links a {
+            display: grid;
+            background: #667;
+        }
+        .status-dot {
+            position: absolute;
+            top: 100%; left: 0;
+            right: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            display: flex;
+            flex-direction: column;
+            background: #334;
+            z-index: 5;
+        }
+        
+        .status-dot.active {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)
+
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator" id="scroll-indicator"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">DANGOTE REFINERY</div>
+            <div id="menu-btn">&#9776</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="switchModule('operations')">Operations</a></li>
+                <li><a href="#" onclick="switchModule('monitoring')">Monitoring</a></li>
+                <li><a href="#" onclick="switchModule('supply-chain')">Supply Chain</a></li>
+                <li><a href="#" onclick="switchModule('financial')">Financial</a></li>
+                <li><a href="#" onclick="switchModule('optimization')">Optimization</a></li>
+                <li><a href="#" onclick="showEmergencyPanel()">Emergency</a></li>
+            </ul>
+            <div class="nav-status">
+                <div class="status-dot"></div>
+                <span>All Systems Operational</span>
+                <button class="control-button" onclick="login()" style="margin-left: 1rem;">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Command Center -->
+    <section class="command-center">
+        <div class="center-container">
+            <div class="center-header">
+                <h1 class="center-title">Integrated Operations Command Center</h1>
+                <p class="center-subtitle">Advanced AI-powered platform for real-time refinery management, predictive maintenance, and supply chain optimization</p>
+            </div>
+
+            <!-- Critical Systems Overview -->
+            <div class="systems-grid">
+                <!-- Production Unit Status -->
+                <div class="system-card">
+                    <div class="card-header">
+                        <h3 class="system-title">Crude Distillation Unit</h3>
+                        <span class="system-status status-operational">OPERATIONAL</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Throughput Rate</span>
+                        <span class="metric-value" id="throughput-rate">648,000 BPD</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Temperature</span>
+                        <span class="metric-value" id="temperature">385°C</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Efficiency</span>
+                        <span class="metric-value" id="efficiency">96.8%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 96.8%"></div>
+                    </div>
+                </div>
+
+                <!-- Safety Systems -->
+                <div class="system-card">
+                    <div class="card-header">
+                        <h3 class="system-title">Safety & Environmental</h3>
+                        <span class="system-status status-operational">SECURE</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Gas Detection</span>
+                        <span class="metric-value">0.02 ppm</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Fire Systems</span>
+                        <span class="metric-value">100% Ready</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Emissions</span>
+                        <span class="metric-value">Within Limits</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <!-- Inventory Management -->
+                <div class="system-card">
+                    <div class="card-header">
+                        <h3 class="system-title">Inventory Intelligence</h3>
+                        <span class="system-status status-warning">OPTIMIZATION</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Crude Oil Stock</span>
+                        <span class="metric-value" id="crude-stock">15.2M Barrels</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Product Storage</span>
+                        <span class="metric-value" id="product-storage">78% Full</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Turnover Rate</span>
+                        <span class="metric-value">12.5 Days</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+
+                <!-- Predictive Maintenance -->
+                <div class="system-card">
+                    <div class="card-header">
+                        <h3 class="system-title">Predictive Maintenance AI</h3>
+                        <span class="system-status status-operational">ACTIVE</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Equipment Health</span>
+                        <span class="metric-value">94.2%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Next Maintenance</span>
+                        <span class="metric-value">7 Days</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Cost Savings</span>
+                        <span class="metric-value">$2.8M/Month</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 94.2%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process Flow Visualization -->
+            <div class="process-flow">
+                <div class="flow-stage">
+                    <div class="flow-icon">🛢️</div>
+                    <h4>Crude Input</h4>
+                    <p>648,000 BPD</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-stage">
+                    <div class="flow-icon">🔥</div>
+                    <h4>Distillation</h4>
+                    <p>96.8% Efficiency</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-stage">
+                    <div class="flow-icon">⚗️</div>
+                    <h4>Processing</h4>
+                    <p>12 Units Active</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-stage">
+                    <div class="flow-icon">🚛</div>
+                    <h4>Distribution</h4>
+                    <p>850 Trucks/Day</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Monitoring -->
+    <section class="monitoring-section">
+        <div class="monitoring-container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Monitoring & Control</h2>
+            </div>
+
+            <div class="monitoring-grid">
+                <div class="main-dashboard">
+                    <div class="dashboard-tabs">
+                        <button class="tab-button active" onclick="switchTab(this, 'production')">Production</button>
+                        <button class="tab-button" onclick="switchTab(this, 'quality')">Quality Control</button>
+                        <button class="tab-button" onclick="switchTab(this, 'logistics')">Logistics</button>
+                        <button class="tab-button" onclick="switchTab(this, 'analytics')">Analytics</button>
+                    </div>
+
+                    <div id="production" class="tab-content active">
+                        <h3>Production Optimization Dashboard</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Unit</th>
+                                    <th>Capacity</th>
+                                    <th>Current Load</th>
+                                    <th>Efficiency</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Crude Distillation</td>
+                                    <td>650,000 BPD</td>
+                                    <td>648,000 BPD</td>
+                                    <td>99.7%</td>
+                                    <td style="color: #00ff88;">Optimal</td>
+                                </tr>
+                                <tr>
+                                    <td>Fluid Catalytic Cracking</td>
+                                    <td>180,000 BPD</td>
+                                    <td>175,200 BPD</td>
+                                    <td>97.3%</td>
+                                    <td style="color: #00ff88;">Normal</td>
+                                </tr>
+                                <tr>
+                                    <td>Hydrocracking</td>
+                                    <td>55,000 BPD</td>
+                                    <td>52,800 BPD</td>
+                                    <td>96.0%</td>
+                                    <td style="color: #ffc107;">Monitoring</td>
+                                </tr>
+                                <tr>
+                                    <td>Reforming</td>
+                                    <td>36,000 BPD</td>
+                                    <td>34,900 BPD</td>
+                                    <td>96.9%</td>
+                                    <td style="color: #00ff88;">Normal</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="quality" class="tab-content">
+                        <h3>Real-time Quality Metrics</h3>
+                        <div class="control-grid">
+                            <div class="control-button" onclick="showQualityReport('gasoline')">
+                                Gasoline RON: 95.2
+                            </div>
+                            <div class="control-button" onclick="showQualityReport('diesel')">
+                                Diesel Cetane: 52.1
+                            </div>
+                            <div class="control-button" onclick="showQualityReport('kerosene')">
+                                Kerosene Flash: 48°C
+                            </div>
+                            <div class="control-button" onclick="showQualityReport('naphtha')">
+                                Naphtha Sulfur: <0.1%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="logistics" class="tab-content">
+                        <h3>Supply Chain Command Center</h3>
+                        <div class="supply-overview">
+                            <div class="supply-card">
+                                <div class="supply-icon">🚢</div>
+                                <div class="supply-metric">12</div>
+                                <p>Crude Tankers</p>
+                                <p style="color: rgba(255,255,255,0.6);">In Route/Port</p>
+                            </div>
+                            <div class="supply-card">
+                                <div class="supply-icon">🚛</div>
+                                <div class="supply-metric">847</div>
+                                <p>Product Trucks</p>
+                                <p style="color: rgba(255,255,255,0.6);">Daily Dispatches</p>
+                            </div>
+                            <div class="supply-card">
+                                <div class="supply-icon">⛽</div>
+                                <div class="supply-metric">2,450</div>
+                                <p>Retail Stations</p>
+                                <p style="color: rgba(255,255,255,0.6);">Connected Network</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="analytics" class="tab-content">
+                        <h3>AI-Powered Insights</h3>
+                        <div class="control-grid">
+                            <div class="control-button" onclick="showPredictiveAnalytics()">
+                                Demand Forecasting
+                            </div>
+                            <div class="control-button" onclick="showMarketAnalysis()">
+                                Market Price Trends
+                            </div>
+                            <div class="control-button" onclick="showOptimization()">
+                                Process Optimization
+                            </div>
+                            <div class="control-button" onclick="showRiskAnalysis()">
+                                Risk Assessment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts and Notifications -->
+                <div class="alerts-panel">
+                    <h3>Live System Alerts</h3>
+                    <div id="alerts-container">
+                        <div class="alert-item alert-low">
+                            <div class="alert-icon">✅</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Maintenance Completed</div>
+                                <div class="alert-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-item alert-medium">
+                            <div class="alert-icon">⚠️</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Catalyst Replacement Due</div>
+                                <div class="alert-time">15 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-item alert-low">
+                            <div class="alert-icon">📊</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Production Target Exceeded</div>
+                                <div class="alert-time">1 hour ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Control Panel -->
+            <div class="control-panel">
+                <h3>Emergency Response Controls</h3>
+                <div class="control-grid">
+                    <div class="control-button critical" onclick="emergencyShutdown()">
+                        Emergency Shutdown
+                    </div>
+                    <div class="control-button" onclick="activateFireSuppression()">
+                        Fire Suppression
+                    </div>
+                    <div class="control-button" onclick="evacuationProtocol()">
+                        Evacuation Protocol
+                    </div>
+                    <div class="control-button" onclick="contactEmergencyTeam()">
+                        Emergency Response Team
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supply Chain Intelligence -->
+    <section class="supply-chain">
+        <div class="supply-container">
+            <div class="section-header">
+                <h2 class="section-title">Supply Chain Intelligence Hub</h2>
+            </div>
+
+            <div class="supply-overview">
+                <div class="supply-card">
+                    <div class="supply-icon">🌍</div>
+                    <div class="supply-metric" id="global-suppliers">47</div>
+                    <h4>Global Suppliers</h4>
+                    <p>Active crude oil suppliers across 12 countries</p>
+                </div>
+                <div class="supply-card">
+                    <div class="supply-icon">📍</div>
+                    <div class="supply-metric" id="distribution-points">2,450</div>
+                    <h4>Distribution Points</h4>
+                    <p>Retail stations and wholesale terminals</p>
+                </div>
+                <div class="supply-card">
+                    <div class="supply-icon">⚡</div>
+                    <div class="supply-metric" id="delivery-time">18</div>
+                    <h4>Average Delivery Time</h4>
+                    <p>Hours from refinery to station</p>
+                </div>
+                <div class="supply-card">
+                    <div class="supply-icon">📈</div>
+                    <div class="supply-metric" id="efficiency-score">98.7</div>
+                    <h4>Supply Chain Efficiency</h4>
+                    <p>AI-optimized routing score</p>
+                </div>
+            </div>
+
+            <!-- Live Shipment Tracking -->
+            <div class="control-panel">
+                <h3>Live Shipment Tracking</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Vessel/Truck ID</th>
+                            <th>Product</th>
+                            <th>Origin/Destination</th>
+                            <th>ETA</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipment-table">
+                        <tr>
+                            <td>DGT-001</td>
+                            <td>Bonny Light Crude</td>
+                            <td>Port Harcourt → Lekki</td>
+                            <td>2h 15m</td>
+                            <td style="color: #00ff88;">On Time</td>
+                            <td><button class="control-button" onclick="trackShipment('DGT-001')">Track</button></td>
+                        </tr>
+                        <tr>
+                            <td>TRK-0847</td>
+                            <td>Premium Gasoline</td>
+                            <td>Lekki → Abuja</td>
+                            <td>6h 30m</td>
+                            <td style="color: #00ff88;">En Route</td>
+                            <td><button class="control-button" onclick="trackShipment('TRK-0847')">Track</button></td>
+                        </tr>
+                        <tr>
+                            <td>TRK-1205</td>
+                            <td>Diesel</td>
+                            <td>Lekki → Kano</td>
+                            <td>Delayed</td>
+                            <td style="color: #ffc107;">Weather Hold</td>
+                            <td><button class="control-button" onclick="reroute('TRK-1205')">Reroute</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="alerts-panel">
+            <h3>Critical Notifications</h3>
+            <div id="notifications-container">
+                <!-- Notifications will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Intelligence -->
+    <section class="financial-intel">
+        <div class="intel-container">
+            <div class="section-header">
+                <h2 class="section-title">Financial Intelligence & Trading</h2>
+            </div>
+
+            <div class="financial-grid">
+                <div class="financial-card">
+                    <h3>Real-time P&L</h3>
+                    <div class="financial-value profit" id="daily-profit">+$24.7M</div>
+                    <p>Today's Net Profit</p>
+                    <div class="metric-row">
+                        <span class="metric-label">Margin</span>
+                        <span class="metric-value">18.3%</span>
+                    </div>
+                </div>
+                <div class="financial-card">
+                    <h3>Revenue Streams</h3>
+                    <div class="financial-value revenue" id="total-revenue">$134.8M</div>
+                    <p>Today's Total Revenue</p>
+                    <div class="metric-row">
+                        <span class="metric-label">vs Target</span>
+                        <span class="metric-value">+12.4%</span>
+                    </div>
+                </div>
+                <div class="financial-card">
+                    <h3>Operating Costs</h3>
+                    <div class="financial-value costs" id="operating-costs">$110.1M</div>
+                    <p>Today's Total Costs</p>
+                    <div class="metric-row">
+                        <span class="metric-label">Efficiency</span>
+                        <span class="metric-value">94.7%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crude Oil Trading Platform -->
+            <div class="control-panel">
+                <h3>Crude Oil Trading Platform</h3>
+                <div class="financial-grid">
+                    <div class="financial-card">
+                        <h4>Brent Crude</h4>
+                        <div class="financial-value" style="color: #007aff;" id="brent-price">$94.25</div>
+                        <p>per barrel</p>
+                        <div class="control-grid" style="margin-top: 1rem;">
+                            <button class="control-button" onclick="executeTradeOrder('brent', 'buy')">Buy</button>
+                            <button class="control-button" onclick="executeTradeOrder('brent', 'sell')">Sell</button>
+                        </div>
+                    </div>
+                    <div class="financial-card">
+                        <h4>WTI Crude</h4>
+                        <div class="financial-value" style="color: #007aff;" id="wti-price">$89.17</div>
+                        <p>per barrel</p>
+                        <div class="control-grid" style="margin-top: 1rem;">
+                            <button class="control-button" onclick="executeTradeOrder('wti', 'buy')">Buy</button>
+                            <button class="control-button" onclick="executeTradeOrder('wti', 'sell')">Sell</button>
+                        </div>
+                    </div>
+                    <div class="financial-card">
+                        <h4>Bonny Light</h4>
+                        <div class="financial-value" style="color: #007aff;" id="bonny-price">$96.80</div>
+                        <p>per barrel</p>
+                        <div class="control-grid" style="margin-top: 1rem;">
+                            <button class="control-button" onclick="executeTradeOrder('bonny', 'buy')">Buy</button>
+                            <button class="control-button" onclick="executeTradeOrder('bonny', 'sell')">Sell</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal System -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">System Information</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Login to Command Center</h3>
+                <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button class="control-button" style="width: 100%;" onclick="performLogin()">Login</button>
+        </div>
+    </div>
+
+    
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3 class="footer-heading">About Us</h3>
+                <p class="footer-text">
+                    Dangote Refinery is Africa's largest oil refinery and the world's largest single-train facility, 
+                    revolutionizing the energy sector with state-of-the-art technology and sustainable practices.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Operations Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Monitoring Systems</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Supply Chain</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Financial Reports</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Sustainability</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Information</h3>
+                <div class="contact-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Dangote Refinery Complex, Lekki Free Trade Zone, Lagos, Nigeria</span>
+                </div>
+                <div class="contact-info">
+                    <i class="fas fa-phone"></i>
+                    <span>+234 1 277 0000</span>
+                </div>
+                <div class="contact-info">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@dangoterefinery.com</span>
+                </div>
+                <div class="contact-info">
+                    <i class="fas fa-clock"></i>
+                    <span>24/7 Operations Center</span>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3 class="footer-heading">Newsletter</h3>
+                <p class="footer-text">Subscribe to our newsletter to receive updates on operations, sustainability reports, and industry insights.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" class="newsletter-input" placeholder="Your Email Address" required>
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="copyright">
+                    &copy; 2025 Dangote Refinery. All Rights Reserved. <br>
+                    Powered by Tehillz
+                </div>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Sitemap</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            const scrollTop = pageYOffset;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollIndicator.style.transform = `scaleX(${scrollPercent / 100})`
+            
+            
+        })
+
+        const menuBtn = document.querySelector('#menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        })
+        
+        const systemState = {
+            alerts: [],
+            shipments: [],
+            financials: {
+                dailyProfit: 24.7,
+                totalRevenue: 134.8,
+                operatingCosts: 110.1
+            },
+            commodityPrices: {
+                brent: 94.25,
+                wti: 89.17,
+                bonny: 96.80
+            },
+            production: {
+                throughputRate: 648000,
+                temperature: 385,
+                efficiency: 96.8
+            },
+           
+            isAuthenticated: false,
+            user: null,
+            token: null
+        };
+
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeRealTimeData();
+            startPriceUpdates();
+            loadNotifications();
+            initializeSupplyChainTracking();
+            
+           
+            const savedAuth = localStorage.getItem('dangote_refinery_auth');
+            if (savedAuth) {
+                try {
+                    const authData = JSON.parse(savedAuth);
+                    if (authData.token && authData.user) {
+                        systemState.isAuthenticated = true;
+                        systemState.user = authData.user;
+                        systemState.token = authData.token;
+                        updateUIForAuthState();
+                    }
+                } catch (e) {
+                    console.error('Failed to parse saved auth data', e);
+                }
+            }
+        });
+
+     
+        function updateUIForAuthState() {
+            const authElements = document.querySelectorAll('.auth-only');
+            const unauthElements = document.querySelectorAll('.unauth-only');
+            
+            if (systemState.isAuthenticated) {
+                authElements.forEach(el => el.style.display = 'block');
+                unauthElements.forEach(el => el.style.display = 'none');
+                
+              
+                const userInfoElement = document.getElementById('user-info');
+                if (userInfoElement) {
+                    userInfoElement.textContent = `Logged in as: ${systemState.user.full_name} (${systemState.user.role})`;
+                }
+            } else {
+                authElements.forEach(el => el.style.display = 'none');
+                unauthElements.forEach(el => el.style.display = 'block');
+            }
+        }
+
+
+        function login() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+        }
+
+        function performLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            
+            if (username === 'admin' && password === 'admin123') {
+                systemState.isAuthenticated = true;
+                systemState.user = {
+                    id: 1,
+                    username: 'admin',
+                    full_name: 'System Administrator',
+                    role: 'admin'
+                };
+                systemState.token = 'simulated_token_' + Math.random().toString(36).substr(2);
+                
+               
+                localStorage.setItem('dangote_refinery_auth', JSON.stringify({
+                    user: systemState.user,
+                    token: systemState.token
+                }));
+                
+                updateUIForAuthState();
+                closeLoginModal();
+                alert('Login successful!');
+            } else {
+                alert('Invalid credentials.');
+            }
+        }
+
+      
+        function logout() {
+            systemState.isAuthenticated = false;
+            systemState.user = null;
+            systemState.token = null;
+            
+            localStorage.removeItem('dangote_refinery_auth');
+            updateUIForAuthState();
+            alert('Logged out successfully');
+        }
+
+       
+        function initializeRealTimeData() {
+            setInterval(() => {
+                updateProductionMetrics();
+                updateFinancialData();
+                updateCommodityPrices();
+                checkSystemAlerts();
+            }, 5000);
+        }
+
+        function updateProductionMetrics() {
+           
+            systemState.production.throughputRate += Math.floor((Math.random() - 0.5) * 1000);
+            systemState.production.temperature += (Math.random() - 0.5) * 5;
+            systemState.production.efficiency += (Math.random() - 0.5) * 0.5;
+
+            // Keep values within realistic ranges
+            systemState.production.throughputRate = Math.max(600000, Math.min(650000, systemState.production.throughputRate));
+            systemState.production.temperature = Math.max(380, Math.min(390, systemState.production.temperature));
+            systemState.production.efficiency = Math.max(95, Math.min(99, systemState.production.efficiency));
+
+            // Update DOM with highlight effect
+            const throughputElement = document.getElementById('throughput-rate');
+            const temperatureElement = document.getElementById('temperature');
+            const efficiencyElement = document.getElementById('efficiency');
+            
+            throughputElement.textContent = systemState.production.throughputRate.toLocaleString() + ' BPD';
+            temperatureElement.textContent = systemState.production.temperature.toFixed(1) + '°C';
+            efficiencyElement.textContent = systemState.production.efficiency.toFixed(1) + '%';
+            
+            // Add highlight effect
+            throughputElement.classList.add('updated');
+            temperatureElement.classList.add('updated');
+            efficiencyElement.classList.add('updated');
+            
+            setTimeout(() => {
+                throughputElement.classList.remove('updated');
+                temperatureElement.classList.remove('updated');
+                efficiencyElement.classList.remove('updated');
+            }, 1000);
+        }
+
+        function updateFinancialData() {
+            // Market-driven financial updates
+            const marketVolatility = (Math.random() - 0.5) * 2;
+            systemState.financials.dailyProfit += marketVolatility;
+            systemState.financials.totalRevenue += marketVolatility * 1.5;
+            
+            const dailyProfitElement = document.getElementById('daily-profit');
+            const totalRevenueElement = document.getElementById('total-revenue');
+            
+            dailyProfitElement.textContent = (systemState.financials.dailyProfit >= 0 ? '+' : '') + 
+                '$' + Math.abs(systemState.financials.dailyProfit).toFixed(1) + 'M';
+            totalRevenueElement.textContent = '$' + systemState.financials.totalRevenue.toFixed(1) + 'M';
+            
+            // Add highlight effect
+            dailyProfitElement.classList.add('updated');
+            totalRevenueElement.classList.add('updated');
+            
+            setTimeout(() => {
+                dailyProfitElement.classList.remove('updated');
+                totalRevenueElement.classList.remove('updated');
+            }, 1000);
+        }
+
+        function updateCommodityPrices() {
+            // Realistic commodity price fluctuations
+            Object.keys(systemState.commodityPrices).forEach(commodity => {
+                const change = (Math.random() - 0.5) * 0.02; // ±1% change
+                systemState.commodityPrices[commodity] *= (1 + change);
+                
+                const element = document.getElementById(commodity + '-price');
+                if (element) {
+                    element.textContent = '$' + systemState.commodityPrices[commodity].toFixed(2);
+                    
+                    // Add highlight effect
+                    element.classList.add('updated');
+                    setTimeout(() => element.classList.remove('updated'), 1000);
+                }
+            });
+        }
+
+        function checkSystemAlerts() {
+            // Generate random system events
+            if (Math.random() < 0.1) { // 10% chance per update
+                generateSystemAlert();
+            }
+        }
+
+        function generateSystemAlert() {
+            const alertTypes = [
+                { type: 'low', icon: '📊', title: 'Production milestone achieved', priority: 'info' },
+                { type: 'medium', icon: '⚠️', title: 'Maintenance window scheduled', priority: 'warning' },
+                { type: 'low', icon: '✅', title: 'Quality check passed', priority: 'success' },
+                { type: 'medium', icon: '🔧', title: 'Equipment calibration needed', priority: 'warning' }
+            ];
+            
+            const alert = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+            const alertElement = document.createElement('div');
+            alertElement.className = `alert-item alert-${alert.type}`;
+            alertElement.innerHTML = `
+                <div class="alert-icon">${alert.icon}</div>
+                <div class="alert-content">
+                    <div class="alert-title">${alert.title}</div>
+                    <div class="alert-time">Just now</div>
+                </div>
+            `;
+            
+            const container = document.getElementById('alerts-container');
+            container.insertBefore(alertElement, container.firstChild);
+            
+            // Remove old alerts (keep only 5)
+            while (container.children.length > 5) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // Module switching
+        function switchModule(module) {
+            console.log(`Switching to ${module} module`);
+            
+            switch(module) {
+                case 'operations':
+                    showOperationsModule();
+                    break;
+                case 'monitoring':
+                    showMonitoringModule();
+                    break;
+                case 'supply-chain':
+                    document.querySelector('.supply-chain').scrollIntoView({behavior: 'smooth'});
+                    break;
+                case 'financial':
+                    document.querySelector('.financial-intel').scrollIntoView({behavior: 'smooth'});
+                    break;
+                case 'optimization':
+                    showOptimizationModule();
+                    break;
+            }
+        }
+
+        function showOperationsModule() {
+            openModal('Operations Control Center', `
+                <div class="control-grid">
+                    <div class="financial-card">
+                        <h4>Current Operations</h4>
+                        <div class="metric-row">
+                            <span class="metric-label">Active Units</span>
+                            <span class="metric-value">12/12</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Total Capacity</span>
+                            <span class="metric-value">650,000 BPD</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Utilization</span>
+                            <span class="metric-value">99.7%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="adjustProduction()">Adjust Production Rate</button>
+                    <button class="control-button" onclick="scheduleShutdown()">Schedule Maintenance</button>
+                    <button class="control-button" onclick="optimizeYield()">Optimize Product Yield</button>
+                </div>
+            `);
+        }
+
+        function showMonitoringModule() {
+            document.querySelector('.monitoring-section').scrollIntoView({behavior: 'smooth'});
+        }
+
+        function showOptimizationModule() {
+            openModal('AI Process Optimization', `
+                <h4>Intelligent Process Optimization</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Current Efficiency</span>
+                    <span class="metric-value">96.8%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Potential Improvement</span>
+                    <span class="metric-value" style="color: #00ff88;">+2.1%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Annual Savings</span>
+                    <span class="metric-value" style="color: #00ff88;">$47.2M</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="runOptimization()">Run Optimization</button>
+                    <button class="control-button" onclick="viewRecommendations()">View AI Recommendations</button>
+                </div>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">
+                    AI algorithms analyze 10,000+ data points per second to identify optimization opportunities
+                    in real-time production processes.
+                </p>
+            `);
+        }
+
+        // Tab switching
+        function switchTab(button, tabId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            button.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Emergency functions
+        function showEmergencyPanel() {
+            openModal('Emergency Response System', `
+                <div style="text-align: center; color: #ff453a; margin-bottom: 2rem;">
+                    <h2>🚨 EMERGENCY RESPONSE PROTOCOL 🚨</h2>
+                </div>
+                <div class="control-grid">
+                    <button class="control-button critical" onclick="triggerEmergencyShutdown()">
+                        EMERGENCY SHUTDOWN
+                    </button>
+                    <button class="control-button critical" onclick="activateFireSuppression()">
+                        ACTIVATE FIRE SUPPRESSION
+                    </button>
+                    <button class="control-button critical" onclick="soundEvacuation()">
+                        EVACUATION ALARM
+                    </button>
+                    <button class="control-button" onclick="contactEmergencyServices()">
+                        CONTACT EMERGENCY SERVICES
+                    </button>
+                </div>
+                <p style="margin-top: 2rem; color: rgba(255,255,255,0.6);">
+                    Emergency protocols are tested weekly. All systems are integrated with local
+                    emergency services and regulatory bodies.
+                </p>
+            `);
+        }
+
+        function triggerEmergencyShutdown() {
+            if (confirm('⚠️ CRITICAL WARNING: This will initiate emergency shutdown of all production units. Confirm?')) {
+                alert('🚨 EMERGENCY SHUTDOWN INITIATED\n\n• All production units stopping\n• Safety systems activated\n• Emergency teams notified\n• Regulatory bodies contacted');
+                
+                // Update system status
+                document.querySelector('.nav-status span').textContent = 'EMERGENCY SHUTDOWN ACTIVE';
+                document.querySelector('.status-dot').style.background = '#ff453a';
+            }
+        }
+
+        // Trading functions
+        function executeTradeOrder(commodity, action) {
+            const price = systemState.commodityPrices[commodity];
+            const quantity = prompt(`Enter quantity (barrels) to ${action} ${commodity.toUpperCase()}:`);
+            
+            if (quantity && !isNaN(quantity)) {
+                const totalValue = (parseFloat(quantity) * price).toFixed(2);
+                const confirmation = confirm(
+                    `Confirm ${action.toUpperCase()} order:\n\n` +
+                    `Commodity: ${commodity.toUpperCase()}\n` +
+                    `Quantity: ${parseInt(quantity).toLocaleString()} barrels\n` +
+                    `Price: $${price.toFixed(2)} per barrel\n` +
+                    `Total Value: $${parseFloat(totalValue).toLocaleString()}`
+                );
+                
+                if (confirmation) {
+                    alert(`✅ Trade executed successfully!\n\n${action.toUpperCase()} ${parseInt(quantity).toLocaleString()} barrels of ${commodity.toUpperCase()} at $${price.toFixed(2)}/barrel\n\nTotal: $${parseFloat(totalValue).toLocaleString()}`);
+                    
+                    // Log trade for audit trail
+                    console.log('Trade Executed:', {
+                        commodity: commodity,
+                        action: action,
+                        quantity: quantity,
+                        price: price,
+                        value: totalValue,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            }
+        }
+
+        // Supply chain functions
+        function trackShipment(shipmentId) {
+            openModal('Shipment Tracking', `
+                <h4>Tracking: ${shipmentId}</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Current Location</span>
+                    <span class="metric-value">Lagos-Ibadan Expressway</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Progress</span>
+                    <span class="metric-value">67% Complete</span>
+                </div>
+                <div class="progress-bar" style="margin: 1rem 0;">
+                    <div class="progress-fill" style="width: 67%"></div>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Driver</span>
+                    <span class="metric-value">Ahmed Musa</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Contact</span>
+                    <span class="metric-value">+234 803 XXX XXXX</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="contactDriver('${shipmentId}')">Contact Driver</button>
+                    <button class="control-button" onclick="requestUpdate('${shipmentId}')">Request Update</button>
+                </div>
+            `);
+        }
+
+        function reroute(shipmentId) {
+            openModal('Route Optimization', `
+                <h4>Rerouting: ${shipmentId}</h4>
+                <p style="margin-bottom: 2rem;">AI-powered routing system calculating optimal alternative route...</p>
+                <div class="metric-row">
+                    <span class="metric-label">Original Route</span>
+                    <span class="metric-value">Lekki → A1 → Kano (864 km)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Weather Delay</span>
+                    <span class="metric-value">3-4 hours</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Recommended Route</span>
+                    <span class="metric-value" style="color: #00ff88;">Lekki → A2 → Kaduna → Kano (887 km)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Time Savings</span>
+                    <span class="metric-value" style="color: #00ff88;">-1.5 hours</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="applyReroute('${shipmentId}')">Apply New Route</button>
+                    <button class="control-button" onclick="closeModal()">Cancel</button>
+                </div>
+            `);
+        }
+
+        function applyReroute(shipmentId) {
+            alert(`✅ Route updated for ${shipmentId}\n\nDriver has been notified of the new route. ETA updated to reflect weather avoidance.`);
+            closeModal();
+        }
+
+        // Quality control functions
+        function showQualityReport(product) {
+            const qualityData = {
+                gasoline: {
+                    ron: 95.2,
+                    sulfur: '10 ppm',
+                    density: '0.742 g/cm³',
+                    vapour: '58 kPa'
+                },
+                diesel: {
+                    cetane: 52.1,
+                    sulfur: '10 ppm',
+                    density: '0.835 g/cm³',
+                    viscosity: '2.8 cSt'
+                },
+                kerosene: {
+                    flash: '48°C',
+                    freezing: '-47°C',
+                    sulfur: '3000 ppm',
+                    density: '0.795 g/cm³'
+                },
+                naphtha: {
+                    sulfur: '<0.1%',
+                    octane: 85,
+                    density: '0.665 g/cm³',
+                    distillation: '180°C'
+                }
+            };
+
+            const data = qualityData[product];
+            openModal(`${product.charAt(0).toUpperCase() + product.slice(1)} Quality Report`, `
+                <h4>Current Quality Metrics</h4>
+                ${Object.entries(data).map(([key, value]) => `
+                    <div class="metric-row">
+                        <span class="metric-label">${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        <span class="metric-value">${value}</span>
+                    </div>
+                `).join('')}
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="runQualityTest('${product}')">Run Additional Test</button>
+                    <button class="control-button" onclick="adjustQuality('${product}')">Adjust Parameters</button>
+                </div>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">
+                    All products exceed international quality standards. Continuous monitoring ensures consistency.
+                </p>
+            `);
+        }
+
+        // Advanced analytics functions
+        function showPredictiveAnalytics() {
+            openModal('AI Demand Forecasting', `
+                <h4>30-Day Demand Prediction</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Gasoline Demand</span>
+                    <span class="metric-value" style="color: #00ff88;">+8.3%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Diesel Demand</span>
+                    <span class="metric-value" style="color: #00ff88;">+12.7%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Aviation Fuel</span>
+                    <span class="metric-value" style="color: #ffc107;">+2.1%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Confidence Level</span>
+                    <span class="metric-value">94.8%</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="adjustProductionSchedule()">Adjust Production</button>
+                    <button class="control-button" onclick="viewFullForecast()">View Full Forecast</button>
+                </div>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">
+                    Machine learning models analyze market trends, seasonal patterns, and economic indicators
+                    to predict demand with 94.8% accuracy.
+                </p>
+            `);
+        }
+
+        function showMarketAnalysis() {
+            openModal('Market Intelligence', `
+                <h4>Real-time Market Analysis</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Market Sentiment</span>
+                    <span class="metric-value" style="color: #00ff88;">Bullish</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Price Volatility</span>
+                    <span class="metric-value">Medium (±2.3%)</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Arbitrage Opportunities</span>
+                    <span class="metric-value" style="color: #00ff88;">3 Active</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Risk Score</span>
+                    <span class="metric-value">Low (2.1/10)</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="executeArbitrage()">Execute Arbitrage</button>
+                    <button class="control-button" onclick="hedgePosition()">Hedge Positions</button>
+                </div>
+            `);
+        }
+
+        function showOptimization() {
+            openModal('Process Optimization AI', `
+                <h4>Real-time Optimization Recommendations</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Energy Efficiency</span>
+                    <span class="metric-value" style="color: #00ff88;">+3.2% Potential</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Yield Optimization</span>
+                    <span class="metric-value" style="color: #00ff88;">+1.8% Gasoline</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Cost Reduction</span>
+                    <span class="metric-value" style="color: #00ff88;">$2.1M/Month</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="implementOptimization()">Implement Changes</button>
+                    <button class="control-button" onclick="scheduleOptimization()">Schedule for Later</button>
+                </div>
+            `);
+        }
+
+        function showRiskAnalysis() {
+            openModal('Risk Assessment Dashboard', `
+                <h4>Comprehensive Risk Analysis</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Market Risk</span>
+                    <span class="metric-value" style="color: #ffc107;">Medium</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Operational Risk</span>
+                    <span class="metric-value" style="color: #00ff88;">Low</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Regulatory Risk</span>
+                    <span class="metric-value" style="color: #00ff88;">Low</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Overall Risk Score</span>
+                    <span class="metric-value">3.2/10</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="viewRiskMitigation()">Mitigation Strategies</button>
+                    <button class="control-button" onclick="generateRiskReport()">Generate Report</button>
+                </div>
+            `);
+        }
+
+        // Production control functions
+        function adjustProduction() {
+            const currentRate = prompt('Current production: 648,000 BPD\nEnter new production rate (BPD):');
+            if (currentRate && !isNaN(currentRate)) {
+                const rate = parseInt(currentRate);
+                if (rate >= 300000 && rate <= 650000) {
+                    alert(`Production rate adjusted to ${rate.toLocaleString()} BPD\n\nEstimated time to reach new rate: 45 minutes\nAll downstream units will auto-adjust`);
+                    document.getElementById('throughput-rate').textContent = rate.toLocaleString() + ' BPD';
+                } else {
+                    alert('Production rate must be between 300,000 and 650,000 BPD');
+                }
+            }
+        }
+
+        function scheduleShutdown() {
+            openModal('Maintenance Scheduling', `
+                <h4>Schedule Planned Shutdown</h4>
+                <div class="form-group" style="margin: 1rem 0;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Unit Selection:</label>
+                    <select style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; color: white;">
+                        <option>Crude Distillation Unit</option>
+                        <option>Fluid Catalytic Cracking</option>
+                        <option>Hydrocracking Unit</option>
+                        <option>Reforming Unit</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin: 1rem 0;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Shutdown Date:</label>
+                    <input type="date" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; color: white;">
+                </div>
+                <div class="form-group" style="margin: 1rem 0;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Duration (Days):</label>
+                    <input type="number" placeholder="7" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; color: white;">
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="confirmMaintenance()">Schedule Maintenance</button>
+                    <button class="control-button" onclick="closeModal()">Cancel</button>
+                </div>
+            `);
+        }
+
+        function optimizeYield() {
+            openModal('Yield Optimization Engine', `
+                <h4>Product Yield Optimization</h4>
+                <p style="margin-bottom: 2rem;">AI analyzing current market prices and optimizing product slate...</p>
+                <div class="metric-row">
+                    <span class="metric-label">Gasoline Yield</span>
+                    <span class="metric-value">Current: 45.2% → Optimal: 47.8%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Diesel Yield</span>
+                    <span class="metric-value">Current: 28.1% → Optimal: 26.9%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Jet Fuel Yield</span>
+                    <span class="metric-value">Current: 12.3% → Optimal: 13.1%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue Impact</span>
+                    <span class="metric-value" style="color: #00ff88;">+$1.8M/Day</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="applyYieldOptimization()">Apply Optimization</button>
+                    <button class="control-button" onclick="closeModal()">Review Later</button>
+                </div>
+            `);
+        }
+
+        function applyYieldOptimization() {
+            alert('Yield optimization applied successfully!\n\nProcess units adjusting to new parameters.\nEstimated revenue increase: $1.8M/day');
+            closeModal();
+        }
+
+        // Financial functions
+        function executeArbitrage() {
+            alert('Arbitrage opportunity identified:\n\nBuy Bonny Light at $96.80\nSell Brent futures at $97.45\nProfit: $0.65/barrel\n\nExecuting 100,000 barrel position...');
+        }
+
+        function hedgePosition() {
+            openModal('Risk Hedging', `
+                <h4>Position Hedging Options</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Current Exposure</span>
+                    <span class="metric-value">$2.8B crude inventory</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Recommended Hedge</span>
+                    <span class="metric-value">40% hedge ratio</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Hedging Cost</span>
+                    <span class="metric-value">$2.1M premium</span>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="executeHedge()">Execute Hedge</button>
+                    <button class="control-button" onclick="adjustHedgeRatio()">Adjust Ratio</button>
+                </div>
+            `);
+        }
+
+        // Quality control execution
+        function runQualityTest(product) {
+            alert(`Initiating comprehensive quality test for ${product}...\n\nTest duration: 15 minutes\nResults will be available in real-time\nLab technician notified`);
+            closeModal();
+        }
+
+        function adjustQuality(product) {
+            alert(`Opening process control interface for ${product} quality adjustment...\n\nParameters can be fine-tuned within operational limits\nChanges will be logged for regulatory compliance`);
+            closeModal();
+        }
+
+        // Contact and tracking functions
+        function contactDriver(shipmentId) {
+            alert(`Contacting driver for ${shipmentId}...\n\nSMS sent to driver\nVoice call initiating\nGPS tracking active`);
+            closeModal();
+        }
+
+        function requestUpdate(shipmentId) {
+            alert(`Status update requested for ${shipmentId}\n\nDriver will provide:\n• Current location\n• Expected delays\n• Fuel status\n• Load security`);
+            closeModal();
+        }
+
+        // Implementation functions
+        function confirmMaintenance() {
+            alert('Maintenance scheduled successfully!\n\nAll stakeholders notified\nProduction planning updated\nMaintenance crew assigned\nSpare parts ordered');
+            closeModal();
+        }
+
+        function implementOptimization() {
+            alert('Process optimization implemented!\n\nControl systems updated\nOperators notified\nPerformance monitoring active\nResults tracking initiated');
+            closeModal();
+        }
+
+        function scheduleOptimization() {
+            alert('Optimization scheduled for next maintenance window\n\nChanges will be implemented during planned shutdown\nNo production interruption\nFull validation testing planned');
+            closeModal();
+        }
+
+        function runOptimization() {
+            alert('AI optimization engine activated!\n\nAnalyzing 50,000+ data points\nCalculating optimal parameters\nValidating safety constraints\nResults in 3 minutes...');
+        }
+
+        function viewRecommendations() {
+            openModal('AI Optimization Recommendations', `
+                <h4>Current Optimization Opportunities</h4>
+                <div class="alert-item alert-low">
+                    <div class="alert-icon">⚡</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Reduce steam consumption by 8%</div>
+                        <div class="alert-time">Savings: $1.2M/month</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-low">
+                    <div class="alert-icon">🔧</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Optimize catalyst circulation rate</div>
+                        <div class="alert-time">Yield increase: +1.3%</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-medium">
+                    <div class="alert-icon">📊</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Adjust product slate for market conditions</div>
+                        <div class="alert-time">Revenue increase: +$800K/day</div>
+                    </div>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="implementAllRecommendations()">Implement All</button>
+                    <button class="control-button" onclick="selectiveImplementation()">Selective Implementation</button>
+                </div>
+            `);
+        }
+
+        function implementAllRecommendations() {
+            alert('Implementing all AI recommendations...\n\nEstimated completion: 2 hours\nTotal savings: $3.2M/month\nYield improvement: +2.1%\nAll changes logged and monitored');
+            closeModal();
+        }
+
+        // Price update system
+        function startPriceUpdates() {
+            setInterval(() => {
+                updateCommodityPrices();
+            }, 10000); // Update every 10 seconds
+        }
+
+        // Advanced emergency functions
+        function activateFireSuppression() {
+            alert('🔥 FIRE SUPPRESSION ACTIVATED\n\n• Foam systems deploying\n• Water deluge active\n• Gas detection enhanced\n• Fire brigade notified\n• Area isolated');
+        }
+
+        function evacuationProtocol() {
+            alert('🚨 EVACUATION PROTOCOL INITIATED\n\n• All alarms sounding\n• Emergency exits unlocked\n• Muster points active\n• External emergency services notified\n• Management team alerted');
+        }
+
+        function contactEmergencyTeam() {
+            alert('📞 EMERGENCY RESPONSE TEAM CONTACTED\n\n• Internal emergency team: RESPONDING\n• Fire department: NOTIFIED\n• Medical team: ON STANDBY\n• Local authorities: INFORMED\n• Corporate emergency line: ACTIVE');
+        }
+
+        function activateFireSystems() {
+            alert('🔥 FIRE SUPPRESSION SYSTEMS ACTIVATED\n\n• Deluge systems: ACTIVE\n• Foam monitors: DEPLOYED\n• CO2 systems: READY\n• Water curtains: OPERATING\n• Emergency cooling: INITIATED');
+        }
+
+        function contactEmergencyServices() {
+            alert('📞 EMERGENCY SERVICES CONTACTED\n\n• Fire Department: EN ROUTE\n• Medical Services: STANDBY\n• Police: NOTIFIED\n• NEMA: INFORMED\n• DPR: CONTACTED');
+        }
+
+        function soundEvacuation() {
+            alert('🚨 EVACUATION ALARM ACTIVATED\n\n• Site-wide alarms: SOUNDING\n• PA announcements: ACTIVE\n• Emergency lighting: ON\n• Exit routes: ILLUMINATED\n• Assembly points: STAFFED');
+        }
+
+        // Utility functions
+        function openModal(title, content) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = content;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Advanced analytics implementations
+        function adjustProductionSchedule() {
+            alert('Production schedule updated based on AI forecasting:\n\n• Gasoline production: +8%\n• Diesel production: +12%\n• Optimization complete\n• Revenue impact: +$2.3M/week');
+            closeModal();
+        }
+
+        function viewFullForecast() {
+            openModal('90-Day Market Forecast', `
+                <h4>Extended Market Forecast</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Product</th><th>30-Day</th><th>60-Day</th><th>90-Day</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Premium Gasoline</td><td style="color: #00ff88;">+8.3%</td><td style="color: #00ff88;">+12.1%</td><td style="color: #00ff88;">+15.7%</td></tr>
+                        <tr><td>Automotive Diesel</td><td style="color: #00ff88;">+12.7%</td><td style="color: #00ff88;">+18.2%</td><td style="color: #ffc107;">+9.4%</td></tr>
+                        <tr><td>Aviation Turbine Fuel</td><td style="color: #ffc107;">+2.1%</td><td style="color: #00ff88;">+7.8%</td><td style="color: #00ff88;">+11.3%</td></tr>
+                        <tr><td>Heavy Fuel Oil</td><td style="color: #ff453a;">-3.2%</td><td style="color: #ff453a;">-5.1%</td><td style="color: #ff453a;">-8.7%</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.6);">
+                    Forecast accuracy: 94.8% | Updated every 6 hours | Based on 50+ market indicators
+                </p>
+            `);
+        }
+
+        function executeHedge() {
+            alert('Hedge position executed successfully!\n\n• 40% of crude inventory hedged\n• Protection against $10/barrel decline\n• Monthly premium: $2.1M\n• Risk exposure reduced by 65%');
+            closeModal();
+        }
+
+        function adjustHedgeRatio() {
+            const ratio = prompt('Current hedge ratio: 40%\nEnter new hedge ratio (10-80%):');
+            if (ratio && !isNaN(ratio)) {
+                const hedgeRatio = parseInt(ratio);
+                if (hedgeRatio >= 10 && hedgeRatio <= 80) {
+                    alert(`Hedge ratio adjusted to ${hedgeRatio}%\n\nNew premium: ${(hedgeRatio * 0.0525).toFixed(1)}M/month\nRisk coverage: ${hedgeRatio * 1.6}%`);
+                    closeModal();
+                } else {
+                    alert('Hedge ratio must be between 10% and 80%');
+                }
+            }
+        }
+
+        // Risk management
+        function viewRiskMitigation() {
+            openModal('Risk Mitigation Strategies', `
+                <h4>Active Risk Controls</h4>
+                <div class="alert-item alert-low">
+                    <div class="alert-icon">🛡️</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Price hedging: 40% coverage</div>
+                        <div class="alert-time">Protects against market volatility</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-low">
+                    <div class="alert-icon">🔧</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Predictive maintenance: Active</div>
+                        <div class="alert-time">Prevents 95% of equipment failures</div>
+                    </div>
+                </div>
+                <div class="alert-item alert-low">
+                    <div class="alert-icon">📋</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Regulatory compliance: 100%</div>
+                        <div class="alert-time">All permits and certifications current</div>
+                    </div>
+                </div>
+                <div class="control-grid" style="margin-top: 2rem;">
+                    <button class="control-button" onclick="updateRiskControls()">Update Controls</button>
+                    <button class="control-button" onclick="scheduleRiskReview()">Schedule Review</button>
+                </div>
+            `);
+        }
+
+        function generateRiskReport() {
+            alert('Comprehensive risk report generated!\n\n• Market risk analysis: Complete\n• Operational risk assessment: Complete\n• Regulatory compliance review: Complete\n• Report sent to management team\n• Next review: 30 days');
+            closeModal();
+        }
+
+        // Notification system
+        function loadNotifications() {
+            const notifications = [
+                { type: 'success', message: 'Daily production target exceeded by 2.3%', time: '10 minutes ago' },
+                { type: 'info', message: 'New crude shipment arriving at Terminal 2', time: '25 minutes ago' },
+                { type: 'warning', message: 'Weather advisory: High winds expected', time: '1 hour ago' },
+                { type: 'success', message: 'Quality control: All products within specification', time: '2 hours ago' }
+            ];
+            
+            const container = document.getElementById('notifications-container');
+            if (container) {
+                container.innerHTML = notifications.map(notif => `
+                    <div class="alert-item alert-${notif.type === 'success' ? 'low' : notif.type === 'warning' ? 'medium' : 'low'}">
+                        <div class="alert-icon">${notif.type === 'success' ? '✅' : notif.type === 'warning' ? '⚠️' : 'ℹ️'}</div>
+                        <div class="alert-content">
+                            <div class="alert-title">${notif.message}</div>
+                            <div class="alert-time">${notif.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Supply chain tracking initialization
+        function initializeSupplyChainTracking() {
+            // Simulate real-time shipment updates
+            setInterval(() => {
+                updateShipmentStatuses();
+            }, 15000);
+        }
+
+        function updateShipmentStatuses() {
+            // Update random shipment progress
+            const shipments = document.querySelectorAll('#shipment-table tr');
+            shipments.forEach((row, index) => {
+                if (index > 0 && Math.random() < 0.3) { // Skip header row
+                    const statusCell = row.cells[4];
+                    const statuses = ['On Time', 'En Route', 'Loading', 'Delayed'];
+                    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                    statusCell.textContent = randomStatus;
+                    statusCell.style.color = randomStatus === 'Delayed' ? '#ffc107' : '#00ff88';
+                }
+            });
+        }
+
+        // Advanced system functions
+        function updateRiskControls() {
+            alert('Risk control systems updated!\n\n• Hedge ratios optimized\n• Alert thresholds adjusted\n• Monitoring enhanced\n• Compliance verified');
+            closeModal();
+        }
+
+        function scheduleRiskReview() {
+            alert('Risk review scheduled!\n\n• Date: Next Monday 9:00 AM\n• Attendees: Risk committee\n• Agenda: Quarterly assessment\n• Location: Executive boardroom');
+            closeModal();
+        }
+
+        // Modal click outside to close
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('login-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLoginModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeLoginModal();
+            }
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                showEmergencyPanel();
+            }
+        });
+
+
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+       
+        const newsletterForm = document.getElementById('newsletterForm');
+        
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            const email = emailInput.value;
+            
+            if (email) {
+                alert(`Thank you for subscribing with: ${email}`);
+                emailInput.value = '';
+            }
+        });
+
+ 
+        document.querySelectorAll('.footer-links a').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                link.style.transform = 'translateX(5px)';
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = 'translateX(0)';
+            });
+        });
+
+
+        // Performance monitoring
+        console.log('🛢️ Dangote Refinery Command Center Initialized');
+        console.log('📊 Real-time monitoring: ACTIVE');
+        console.log('🤖 AI systems: OPERATIONAL');
+        console.log('🔒 Security systems: SECURED');
+        console.log('');
+        console.log('Keyboard shortcuts:');
+        console.log('• ESC: Close modal');
+        console.log('• Ctrl+E: Emergency panel');
+        
+        // Auto-save functionality simulation
+        setInterval(() => {
+            const timestamp = new Date().toISOString();
+            console.log(`Auto-save completed: ${timestamp}`);
+        }, 30000);
+
+        // Data export functions
+        function exportOperationalData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                production: systemState.production,
+                financials: systemState.financials,
+                commodityPrices: systemState.commodityPrices,
+                systemStatus: 'operational'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `dangote-operations-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // Make export function available globally
+        window.exportOperationalData = exportOperationalData;
+        
+        console.log('💾 To export operational data, run: exportOperationalData()');
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
